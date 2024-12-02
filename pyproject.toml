@@ -1,0 +1,18 @@
+[project]
+name = "pp-3-registrace"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "bcrypt>=4.2.1",
+    "customtkinter>=5.2.2",
+    "mypy>=1.13.0",
+    "psycopg[binary]>=3.2.3",
+    "pylint>=3.3.1",
+    "python-dotenv>=1.0.1",
+    "rich>=13.9.4",
+    "ruff>=0.8.0",
+    "sqlalchemy-utils>=0.41.2",
+    "sqlalchemy[mypy]>=2.0.36",
+]

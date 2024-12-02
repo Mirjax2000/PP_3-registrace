@@ -13,7 +13,7 @@ from sqlalchemy_utils import (
 console: Console = Console()
 load_dotenv(override=True)
 
-db_name: str = "health"
+db_name: str = "bank"
 db_url: str = (
     f"postgresql+psycopg://{os.getenv('USER')}:"
     f"{os.getenv('PASSWORD')}@{os.getenv('HOST')}:"
@@ -35,7 +35,7 @@ def create_database(name: str):
             f"databaze neexistuje!\nVytvarim DB: {name}",
             style="red bold",
         )
-        create_db(engine.url)
+        create_db(engine.url, encoding="utf-8")
 
         with session.connection() as conn:
             temp = conn.execute(text("SELECT version();"))
@@ -49,4 +49,4 @@ def create_database(name: str):
 
 
 if __name__ == "__main__":
-    create_database("health")
+    create_database(db_name)

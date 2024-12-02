@@ -3,10 +3,10 @@
 import customtkinter as ctk
 
 
-def ctk_init(self, app_width: int, app_height: int):
+def ctk_init(self, name: str, app_width: int, app_height: int):
     """App init"""
     self.update_idletasks()
-    self.title("SQLAlchemy")
+    self.title(f"{name}")
     self.minsize(app_width, app_height)
     self.resizable(False, False)
     width: int = app_width
@@ -79,24 +79,6 @@ def make_btn(
         ipadx=5,
     )
     return btn
-
-
-def bmi_calc(vaha: float, vyska: float) -> tuple[float, str]:
-    """B.M.I."""
-    result_txt: str
-    result_num: float = round(vaha / (vyska) ** 2, 2)
-    if result_num < 18.5:
-        result_txt = "Podvaha"
-    elif result_num < 24.9:
-        result_txt = "Normal"
-    elif result_num < 29.9:
-        result_txt = "Nadvaha"
-    elif result_num < 34.9:
-        result_txt = "Omezita"
-    else:
-        result_txt = "Extremni omezita"
-
-    return result_num, result_txt
 
 
 if __name__ == "__main__":
