@@ -10,7 +10,7 @@ from sqlalchemy_utils import (
     create_database as create_db,
 )
 
-console: Console = Console()
+csl: Console = Console()
 load_dotenv(override=True)
 
 db_name: str = "bank"
@@ -26,26 +26,37 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
+def db_check() -> tuple:
+    """Vypis info o databázi"""
+    with session.connection() as conn:
+        verze = conn.execute(text("SELECT version();")).fetchone()
+        databaze = conn.execute(text("SELECT current_database();")).fetchone()
+
+    verze_info = verze[0] if verze else "Není dostupná verze."
+    name_db = databaze[0] if databaze else "Není dostupná databáze."
+
+    return verze_info, name_db
+
+
 def create_database(name: str):
     """Creating database"""
-    console.clear()
+    csl.clear()
 
     if not db_exist(engine.url):
-        console.print(
-            f"databaze neexistuje!\nVytvarim DB: {name}",
+        csl.log(
+            f"Vytvarim DB: {name}",
             style="red bold",
         )
         create_db(engine.url, encoding="utf-8")
-
-        with session.connection() as conn:
-            temp = conn.execute(text("SELECT version();"))
-            console.print(temp.fetchone(), style="green")
-            console.print("databaze vytvorena", style="blue")
+        csl.log("databaze vytvorena", style="blue")
+        verze, databaze = db_check()
+        csl.log(f"verze DB: {verze}")
+        csl.log(f"jmeno DB: {databaze}")
     else:
-        console.log("Databaze jiz existuje", style="blue")
-        with session.connection() as conn:
-            temp = conn.execute(text("SELECT version();"))
-            console.print(temp.fetchone(), style="blue")
+        csl.log("Databaze jiz existuje", style="blue")
+        verze, databaze = db_check()
+        csl.log(f"verze DB: {verze}")
+        csl.log(f"jmeno DB: {databaze}")
 
 
 if __name__ == "__main__":

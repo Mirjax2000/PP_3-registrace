@@ -1,9 +1,9 @@
 """DB model"""
 
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, String, Integer, LargeBinary
+from sqlalchemy import Column, String, Integer, LargeBinary, text
 from rich.console import Console
-from modules.connection import engine
+from modules.connection import engine, session
 
 csl: Console = Console()
 Base = declarative_base()
@@ -41,5 +41,20 @@ def create_tables(name: str):
     csl.print(f"table: {name} vytvoren.", style="Bold Blue")
 
 
+def table_list() -> list:
+    """vypis tabulek z databaze"""
+    with session.connection():
+        vypis = session.execute(
+            text(
+                "SELECT table_name FROM information_schema.tables\
+                                      WHERE table_schema = 'public';"
+            )
+        ).fetchmany()
+        tables: list = [row[0] for row in vypis]
+    return tables
+
+
 if __name__ == "__main__":
+    csl.clear()
     create_tables(table_name)
+    csl.log(*table_list())

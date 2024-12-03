@@ -1,11 +1,11 @@
 """main program"""
 
-import base64
 import bcrypt
 import customtkinter as ctk
 from rich.console import Console
 from modules.service import ctk_init, make_label, make_btn, make_entry
 from modules.connection import session
+from sqlalchemy import text
 from models.model import BankUser
 
 csl: Console = Console()
@@ -19,22 +19,21 @@ class App(ctk.CTk):
         ctk_init(self, "registration", 400, 400)
 
     @staticmethod
-    def encrypt(password: str) -> str:
+    def encrypt(password: str) -> bytes:
         """encription"""
-        hash_bytes = bcrypt.hashpw(
+        return bcrypt.hashpw(
             password.encode("utf-8"), bcrypt.gensalt()
         )
-        return base64.b64encode(hash_bytes).decode("utf-8")
 
     @staticmethod
-    def verifikace(entry: str, record: str) -> bool:
+    def verifikace(entry: str, record: bytes) -> bool:
         """Verifikace vstupu"""
-        record_bytes: bytes = base64.b64decode(record)
-        return bcrypt.checkpw(entry.encode("utf-8"), record_bytes)
+        return bcrypt.checkpw(entry.encode("utf-8"), record)
 
-    def insert_to_db(self, email: str, password: str) -> None:
+    @staticmethod
+    def insert_to_db(email: str, password: str) -> None:
         """zaznam do DB"""
-        hash_password: str = App.encrypt(password)
+        hash_password: bytes = App.encrypt(password)
         bank_user = BankUser(password=hash_password, email=email)
         with session.connection():
             session.add(bank_user)
@@ -54,5 +53,6 @@ class App(ctk.CTk):
 
 
 if __name__ == "__main__":
+    csl.clear()
     app: App = App()
     app.mainloop()
