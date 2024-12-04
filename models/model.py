@@ -35,10 +35,9 @@ class BankUser(Base):
 
 def create_tables(name: str):
     """Vytvori tably v DB: health"""
-    csl.print(f"Vytvarim table: {name}.", style="bold blue")
-
+    csl.log(f"Vytvarim table: {name}.", style="bold blue")
     Base.metadata.create_all(engine)
-    csl.print(f"table: {name} vytvoren.", style="Bold Blue")
+    csl.log(f"table: {name} vytvoren.", style="Bold Blue")
 
 
 def table_list() -> list:
@@ -50,8 +49,12 @@ def table_list() -> list:
                                       WHERE table_schema = 'public';"
             )
         ).fetchmany()
-        tables: list = [row[0] for row in vypis]
-    return tables
+        tables: list = (
+            [row[0] for row in vypis]
+            if vypis
+            else ["Zadna tabulka nenalezena!"]
+        )
+        return tables
 
 
 if __name__ == "__main__":

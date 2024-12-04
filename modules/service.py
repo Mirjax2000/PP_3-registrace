@@ -1,6 +1,18 @@
 """Service module"""
 
+from pyclbr import Function
+from typing import TypeAlias
 import customtkinter as ctk
+
+Label: TypeAlias = ctk.CTkLabel
+Entry: TypeAlias = ctk.CTkEntry
+Btn: TypeAlias = ctk.CTkButton
+Frame: TypeAlias = ctk.CTkFrame
+Dnn: TypeAlias = dict | None
+
+font_lbl: tuple = ("Helvetica", 20)
+font_btn: tuple = ("Helvetica", 18)
+font_entr: tuple = ("Segoe UI", 18)
 
 
 def ctk_init(self, name: str, app_width: int, app_height: int):
@@ -18,66 +30,59 @@ def ctk_init(self, name: str, app_width: int, app_height: int):
     self.geometry(f"{width}x{height}+{x}+{y}")
 
 
-def make_label(
-    self, text_l: str, row: int, column: int
-) -> ctk.CTkLabel:
+def mk_frm(
+    parent,
+    frame_args: Dnn = None,
+    grid_args: Dnn = None,
+    sticky: str = "nsew",
+) -> Frame:
+    """Make Frame"""
+    frame_args = frame_args or {}
+    grid_args = grid_args or {}
+    frame: Frame = Frame(parent, corner_radius=4, **frame_args)
+    frame.grid(sticky=sticky, **grid_args)
+    return frame
+
+
+def mk_lbl(
+    parent,
+    label_args: Dnn = None,
+    grid_args: Dnn = None,
+    sticky: str = "nsew",
+) -> Label:
     """Make Label"""
-    label: ctk.CTkLabel = ctk.CTkLabel(
-        self,
-        text=text_l,
-        font=("Helvetica", 20),
-        bg_color="#434343",
-        corner_radius=10,
-    )
-    label.grid(
-        row=row,
-        column=column,
-        sticky="nsew",
-        pady=5,
-        padx=5,
-        ipady=5,
-        ipadx=5,
-    )
+    label_args = label_args or {}
+    grid_args = grid_args or {}
+    label: Label = Label(parent, font=font_lbl, **label_args)
+    label.grid(sticky=sticky, **grid_args)
     return label
 
 
-def make_entry(
-    self, text_p: str, row: int, column: int
-) -> ctk.CTkEntry:
+def mk_entr(
+    parent,
+    entry_args: Dnn = None,
+    grid_args: Dnn = None,
+    sticky: str = "nsew",
+) -> Entry:
     """Make Entry"""
-    entry: ctk.CTkEntry = ctk.CTkEntry(
-        self,
-        placeholder_text=text_p,
-        font=("Fira code", 18),
-    )
-    entry.grid(
-        row=row,
-        column=column,
-        sticky="nsew",
-        pady=5,
-        padx=5,
-        ipady=5,
-        ipadx=5,
-    )
+    entry_args = entry_args or {}
+    grid_args = grid_args or {}
+    entry: Entry = Entry(parent, font=font_entr, **entry_args)
+    entry.grid(sticky=sticky, **grid_args)
     return entry
 
 
-def make_btn(
-    self, text_btn: str, row: int, col: int, command=None
-) -> ctk.CTkButton:
+def mk_btn(
+    parent,
+    btn_args: Dnn = None,
+    grid_args: Dnn = None,
+    sticky: str = "nsew",
+) -> Btn:
     """make btn"""
-    btn: ctk.CTkButton = ctk.CTkButton(
-        self, text=text_btn, font=("Helvetica", 22), command=command
-    )
-    btn.grid(
-        row=row,
-        column=col,
-        sticky="nsew",
-        pady=10,
-        padx=10,
-        ipady=5,
-        ipadx=5,
-    )
+    btn_args = btn_args or {}
+    grid_args = grid_args or {}
+    btn: Btn = Btn(parent, font=font_btn, **btn_args)
+    btn.grid(sticky=sticky, **grid_args)
     return btn
 
 

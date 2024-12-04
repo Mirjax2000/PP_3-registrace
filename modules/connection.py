@@ -30,15 +30,19 @@ def db_check() -> tuple:
     """Vypis info o databázi"""
     with session.connection() as conn:
         verze = conn.execute(text("SELECT version();")).fetchone()
-        databaze = conn.execute(text("SELECT current_database();")).fetchone()
+        databaze = conn.execute(
+            text("SELECT current_database();")
+        ).fetchone()
 
-    verze_info = verze[0] if verze else "Není dostupná verze."
-    name_db = databaze[0] if databaze else "Není dostupná databáze."
+    verze_info: str = verze[0] if verze else "Není dostupná verze."
+    name_db: str = (
+        databaze[0] if databaze else "Není dostupná databáze."
+    )
 
     return verze_info, name_db
 
 
-def create_database(name: str):
+def create_database(name: str) -> None:
     """Creating database"""
     csl.clear()
 
